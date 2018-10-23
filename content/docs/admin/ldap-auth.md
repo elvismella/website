@@ -5,7 +5,7 @@ date = "2017-01-21"
 type = "admin-doc"
 +++
 
-BookStack can be configured to allow LDAP based user login. While LDAP login is enabled you cannot log in with the standard user/password login and new user registration is disabled. BookStack will only use the LDAP server for getting user details and for authentication. Data on the LDAP server is not currently editable through BookStack.
+BookStack can be configured to allow LDAP based user login. While LDAP login is enabled you cannot log in with the standard user/password login and new user registration is disabled. BookStack will only use the LDAP server for getting user details and for authentication. Data on the LDAP server is not currently editable through BookStack. Bookstack .env File located at : //var/www/bookstack
 
 ### Authentication Setup
 
@@ -14,27 +14,36 @@ When a LDAP user logs into BookStack for the first time their BookStack profile 
 To set up LDAP-based authentication add or modify the following variables in your `.env` file:
 
 ```bash
-# General auth
+# General auth (Choices are standard or ldap)
 AUTH_METHOD=ldap
 
-# The LDAP host, Adding a port is optional
-LDAP_SERVER=example.com:389
-# If using LDAP over SSL you should also define the protocol:
-# LDAP_SERVER=ldaps://example.com:636
+#LDAP Server Settings: Configure LDAP Server Examples Below
+#LDAP_SERVER=192.168.0.1
+#LDAP_SERVER=192.168.0.1:389
+#LDAP_SERVER:ldaps://192.168.0.1:636
+#LDAP_SERVER
 
-# The base DN from where users will be searched within.
+
+
+# The Base DN where Users will be Searched Within. 
+#If your OU or User has Spaces, use (") quotes at the beginning and end of DN. Example Below:
+# (WITH Spaces) LDAP_BASE_DN="ou=Time Capsule",dc=bookstack,dc=com"
+# (Without Spaces) LDAP_BASE_DN=ou=Users,dc=bookstack,dc=com
 LDAP_BASE_DN=ou=People,dc=example,dc=com
 
 # The full DN and password of the user used to search the server
+#For Active Directory, LDAP_DN="Username@Domain.com" (With Quotes)
 # Can both be left as false to bind anonymously
 LDAP_DN=false
 LDAP_PASS=false
 
 # A filter to use when searching for users
 # The user-provided user-name used to replace any occurrences of '${user}'
+#For Active Directory use: LDAP_USER_FILTER=(&(sAMAccountName=${user}))
 LDAP_USER_FILTER=(&(uid=${user}))
 
 # Set the LDAP version to use when connecting to the server.
+# For Active Directory use: LDAP_VERSION=3
 LDAP_VERSION=false
 
 # Set the default 'email' attribute. Defaults to 'mail'.
